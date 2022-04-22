@@ -46,9 +46,14 @@ class _HomePageState extends State<HomePage> {
                                 child: Text("Datanya None!!"),
                               ),
                               (a) => a.fold(
-                                  (l) => Container(
-                                        child: Text(l.toString()),
-                                      ),
+                                  (l) => l.map(
+                                      notFound: (e) =>
+                                          errorGetProvinceWidget(e.msg),
+                                      badRequest: (e) =>
+                                          errorGetProvinceWidget(e.badRequest),
+                                      serverError: (e) => errorGetProvinceWidget(
+                                          "Server Error, Please Try Again")),
+                                  // errorGetProvinceWidget(),
                                   (r) => Expanded(
                                         child: ListView.builder(
                                           itemBuilder: ((context, index) {
@@ -69,6 +74,14 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Expanded errorGetProvinceWidget(String message) {
+    return Expanded(
+      child: Container(
+        child: Text(message),
       ),
     );
   }

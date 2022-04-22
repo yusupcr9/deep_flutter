@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:deep_flutter/domain/location/location_failure.dart';
 import 'package:deep_flutter/domain/location/location_interface.dart';
 import 'package:deep_flutter/domain/location/location_req.dart';
+import 'package:deep_flutter/domain/location/province_data.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
@@ -10,7 +12,7 @@ class LocationRepository extends LocationInterface {
   LocationRepository(this.dio);
 
   @override
-  Future<Either<String, ProvinceResponse>>
+  Future<Either<LocationFailure, ProvinceResponse>>
       getAllLocationFromRajaOngkir() async {
     Response response;
     try {
@@ -21,9 +23,18 @@ class LocationRepository extends LocationInterface {
       final data = ProvinceResponse.fromJson(_result);
       print(data.status.code);
       return right(data);
-    } catch (e) {
-      print(e);
-      return left(e.toString());
+    } on DioError catch (e) {
+      print(e.response!.statusCode);
+      switch (e.response!.statusCode) {
+        case 400:
+          final errorData = e.response!.data['rajaongkir']['status'];
+          final data = ProvinceStatusData.fromJson(errorData);
+          return left(LocationFailure.badRequest(data.description));
+        case 404:
+          return left(LocationFailure.notFound('Not Found'));
+        default:
+          return left(LocationFailure.serverError());
+      }
     }
     ;
   }
