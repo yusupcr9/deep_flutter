@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:deep_flutter/domain/location/province_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +17,9 @@ class LocationPage extends StatefulWidget {
 class _LocationPageState extends State<LocationPage> {
   String _errorMessage = '';
   ProvinceResponse? _provinceResponse;
+  List<DropdownMenuItem<ProvinceResultData>>? _provinceListItem = [];
+  ProvinceResultData? _provinceSelected =
+      ProvinceResultData("12", "Kalimantan Barat");
   void LocationBlocListener(BuildContext context, LocationState state) {
     state.maybeMap(
         orElse: () {},
@@ -32,8 +36,14 @@ class _LocationPageState extends State<LocationPage> {
                     message: _errorMessage,
                   )..show(context);
                 },
-                (r) => {
-                  _provinceResponse = r,
+                (r) {
+                  _provinceResponse = r;
+                  _provinceListItem = r.results
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e.province),
+                          ))
+                      .toList();
                 },
               ),
             ));
@@ -50,30 +60,51 @@ class _LocationPageState extends State<LocationPage> {
             child: BlocConsumer<LocationBloc, LocationState>(
               listener: LocationBlocListener,
               builder: (context, state) {
-                return Container(
-                  child: Column(
-                    children: [
-                      state.maybeMap(
-                          orElse: () =>
-                              Container(child: Text("Something Wrong")),
-                          provinceDataOptions: (e) {
-                            if (e.onLoading) {
-                              return Center(child: CircularProgressIndicator());
-                            } else {
-                              return e.dataProvince.fold(
-                                () => noneDataGetProvinceWidget(),
-                                (a) => a.fold(
-                                    (l) =>
-                                        errorGetProvinceWidget(_errorMessage),
-                                    // errorGetProvinceWidget(),
-                                    (r) => successGetProvinceWidget(
-                                        _provinceResponse!)),
-                              );
-                            }
-                          })
-                    ],
+                return Center(
+                  child: Container(
+                    margin: EdgeInsets.all(20),
+                    decoration: BoxDecoration(shape: BoxShape.rectangle),
+                    width: double.infinity,
+                    child: DropdownButton<ProvinceResultData>(
+                      isExpanded: true,
+                      hint: Text("Pilih Provinsi"),
+                      items: _provinceListItem == null ? [] : _provinceListItem,
+                      onChanged: (newVal) {
+                        print(newVal!.province);
+                        setState(() {
+                          _provinceSelected = newVal;
+                        });
+                      },
+                      value:
+                          _provinceSelected == null ? null : _provinceSelected,
+                    ),
                   ),
                 );
+
+                // Container(
+                //   child: Column(
+                //     children: [
+                //       state.maybeMap(
+                //           orElse: () =>
+                //               Container(child: Text("Something Wrong")),
+                //           provinceDataOptions: (e) {
+                //             if (e.onLoading) {
+                //               return Center(child: CircularProgressIndicator());
+                //             } else {
+                //               return e.dataProvince.fold(
+                //                 () => noneDataGetProvinceWidget(),
+                //                 (a) => a.fold(
+                //                     (l) =>
+                //                         errorGetProvinceWidget(_errorMessage),
+                //                     // errorGetProvinceWidget(),
+                //                     (r) => successGetProvinceWidget(
+                //                         _provinceResponse!)),
+                //               );
+                //             }
+                //           })
+                //     ],
+                //   ),
+                // );
               },
             ),
           ),
