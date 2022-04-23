@@ -1,17 +1,15 @@
 import 'package:deep_flutter/presentation/home/home_page.dart';
+import 'package:deep_flutter/presentation/router.gr.dart';
 import 'package:flutter/material.dart';
 
 class AppWidget extends StatelessWidget {
-  const AppWidget({Key? key}) : super(key: key);
-
+  final _appRouter = AppRouter();
+  AppWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }

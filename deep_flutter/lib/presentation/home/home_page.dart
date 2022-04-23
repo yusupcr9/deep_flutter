@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:deep_flutter/injection.dart';
+import 'package:deep_flutter/presentation/router.gr.dart';
 import 'package:flutter/material.dart';
 
 import '../../application/location/location_bloc.dart';
@@ -20,68 +22,12 @@ class _HomePageState extends State<HomePage> {
         title: Text("Kambing"),
       ),
       body: Container(
-        child: BlocProvider(
-          create: (context) => getIt<LocationBloc>(),
-          child: BlocBuilder<LocationBloc, LocationState>(
-            builder: (context, state) {
-              return Container(
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        context
-                            .read<LocationBloc>()
-                            .add(LocationEvent.getLocationProvince());
-                      },
-                      child: Text("Tekan Aku"),
-                    ),
-                    state.maybeMap(
-                        orElse: () => Container(child: Text("Something Wrong")),
-                        provinceDataOptions: (e) {
-                          if (e.onLoading) {
-                            return Center(child: CircularProgressIndicator());
-                          } else {
-                            return e.dataProvince.fold(
-                              () => Container(
-                                child: Text("Datanya None!!"),
-                              ),
-                              (a) => a.fold(
-                                  (l) => l.map(
-                                      notFound: (e) =>
-                                          errorGetProvinceWidget(e.msg),
-                                      badRequest: (e) =>
-                                          errorGetProvinceWidget(e.badRequest),
-                                      serverError: (e) => errorGetProvinceWidget(
-                                          "Server Error, Please Try Again")),
-                                  // errorGetProvinceWidget(),
-                                  (r) => Expanded(
-                                        child: ListView.builder(
-                                          itemBuilder: ((context, index) {
-                                            return ListTile(
-                                              title: Text(
-                                                  r.results[index].province),
-                                            );
-                                          }),
-                                          itemCount: r.results.length,
-                                        ),
-                                      )),
-                            );
-                          }
-                        })
-                  ],
-                ),
-              );
-            },
-          ),
+        child: ElevatedButton(
+          onPressed: () {
+            context.router.push(LocationRoute());
+          },
+          child: Text("Tekan Aku"),
         ),
-      ),
-    );
-  }
-
-  Expanded errorGetProvinceWidget(String message) {
-    return Expanded(
-      child: Container(
-        child: Text(message),
       ),
     );
   }
