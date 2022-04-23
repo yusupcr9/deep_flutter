@@ -96,17 +96,8 @@ class _LocationPageState extends State<LocationPage> {
                           items: _provinceListItem == null
                               ? []
                               : _provinceListItem,
-                          onChanged: (newVal) {
-                            print(newVal!.province);
-                            setState(() {
-                              _provinceSelected = newVal;
-                              _citySelected = null;
-                              _cityListItem = [];
-                            });
-                            context.read<LocationBloc>()
-                              ..add(LocationEvent.getLocationCity(
-                                  provinceId: newVal.provinceId!));
-                          },
+                          onChanged: (newVal) =>
+                              onProvinceChanged(context, newVal),
                           value: _provinceSelected == null
                               ? null
                               : _provinceSelected,
@@ -115,11 +106,7 @@ class _LocationPageState extends State<LocationPage> {
                           isExpanded: true,
                           hint: Text("Pilih City"),
                           items: _cityListItem == null ? [] : _cityListItem,
-                          onChanged: (newVal) {
-                            setState(() {
-                              _citySelected = newVal;
-                            });
-                          },
+                          onChanged: onCityChanged,
                           value: _citySelected == null ? null : _citySelected,
                         ),
                       ],
@@ -157,6 +144,22 @@ class _LocationPageState extends State<LocationPage> {
         ),
       ),
     );
+  }
+
+  void onCityChanged(LocationResultData? newVal) {
+    setState(() {
+      _citySelected = newVal;
+    });
+  }
+
+  void onProvinceChanged(BuildContext context, LocationResultData? newVal) {
+    setState(() {
+      _provinceSelected = newVal;
+      _citySelected = null;
+      _cityListItem = [];
+    });
+    context.read<LocationBloc>()
+      ..add(LocationEvent.getLocationCity(provinceId: newVal!.provinceId!));
   }
 
   Container noneDataGetProvinceWidget() {
