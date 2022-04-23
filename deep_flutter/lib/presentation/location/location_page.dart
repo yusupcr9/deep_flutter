@@ -1,5 +1,5 @@
 import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:deep_flutter/domain/location/province_data.dart';
+import 'package:deep_flutter/domain/location/location_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,12 +17,35 @@ class LocationPage extends StatefulWidget {
 class _LocationPageState extends State<LocationPage> {
   String _errorMessage = '';
   ProvinceResponse? _provinceResponse;
-  List<DropdownMenuItem<ProvinceResultData>>? _provinceListItem = [];
-  ProvinceResultData? _provinceSelected =
-      ProvinceResultData("12", "Kalimantan Barat");
+  List<DropdownMenuItem<LocationResultData>>? _provinceListItem = [];
+  LocationResultData? _provinceSelected;
+  List<DropdownMenuItem<LocationResultData>>? _cityListItem = [];
+  LocationResultData? _citySelected;
   void LocationBlocListener(BuildContext context, LocationState state) {
     state.maybeMap(
         orElse: () {},
+        cityDataOptions: (e) => e.dataCity.fold(
+            () => print("Is Loading"),
+            (a) => a.fold(
+                  (l) {
+                    l.map(
+                      notFound: (e) => _errorMessage = e.msg,
+                      badRequest: (e) => _errorMessage = e.badRequest,
+                      serverError: (e) => _errorMessage = "Server Error",
+                    );
+                    FlushbarHelper.createError(
+                      message: _errorMessage,
+                    )..show(context);
+                  },
+                  (r) {
+                    _cityListItem = r.results
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text("${e.type} ${e.cityName}"),
+                            ))
+                        .toList();
+                  },
+                )),
         provinceDataOptions: (e) => e.dataProvince.fold(
               () => {},
               (a) => a.fold(
@@ -41,7 +64,7 @@ class _LocationPageState extends State<LocationPage> {
                   _provinceListItem = r.results
                       .map((e) => DropdownMenuItem(
                             value: e,
-                            child: Text(e.province),
+                            child: Text(e.province!),
                           ))
                       .toList();
                 },
@@ -65,18 +88,41 @@ class _LocationPageState extends State<LocationPage> {
                     margin: EdgeInsets.all(20),
                     decoration: BoxDecoration(shape: BoxShape.rectangle),
                     width: double.infinity,
-                    child: DropdownButton<ProvinceResultData>(
-                      isExpanded: true,
-                      hint: Text("Pilih Provinsi"),
-                      items: _provinceListItem == null ? [] : _provinceListItem,
-                      onChanged: (newVal) {
-                        print(newVal!.province);
-                        setState(() {
-                          _provinceSelected = newVal;
-                        });
-                      },
-                      value:
-                          _provinceSelected == null ? null : _provinceSelected,
+                    child: Column(
+                      children: [
+                        DropdownButton<LocationResultData>(
+                          isExpanded: true,
+                          hint: Text("Pilih Provinsi"),
+                          items: _provinceListItem == null
+                              ? []
+                              : _provinceListItem,
+                          onChanged: (newVal) {
+                            print(newVal!.province);
+                            setState(() {
+                              _provinceSelected = newVal;
+                              _citySelected = null;
+                              _cityListItem = [];
+                            });
+                            context.read<LocationBloc>()
+                              ..add(LocationEvent.getLocationCity(
+                                  provinceId: newVal.provinceId!));
+                          },
+                          value: _provinceSelected == null
+                              ? null
+                              : _provinceSelected,
+                        ),
+                        DropdownButton<LocationResultData>(
+                          isExpanded: true,
+                          hint: Text("Pilih City"),
+                          items: _cityListItem == null ? [] : _cityListItem,
+                          onChanged: (newVal) {
+                            setState(() {
+                              _citySelected = newVal;
+                            });
+                          },
+                          value: _citySelected == null ? null : _citySelected,
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -124,7 +170,7 @@ class _LocationPageState extends State<LocationPage> {
       child: ListView.builder(
         itemBuilder: ((context, index) {
           return ListTile(
-            title: Text(r.results[index].province),
+            title: Text(r.results[index].province!),
           );
         }),
         itemCount: r.results.length,

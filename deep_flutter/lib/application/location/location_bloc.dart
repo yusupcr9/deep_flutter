@@ -25,7 +25,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           emit(LocationState.provinceDataOptions(
               onLoading: false, dataProvince: some(_result)));
         },
-        getLocationCity: (e) {},
+        getLocationCity: (e) async {
+          emit(LocationState.cityDataOptions(
+              onLoading: true, dataCity: none()));
+          final _result =
+              await _locationInterface.getCityByProvinceId(provinceId: e.provinceId);
+          emit(LocationState.cityDataOptions(
+              onLoading: false, dataCity: some(_result)));
+        },
       );
     });
   }
