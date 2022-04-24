@@ -16,12 +16,20 @@ class LocationPage extends StatefulWidget {
 
 class _LocationPageState extends State<LocationPage> {
   String _errorMessage = '';
-  ProvinceResponse? _provinceResponse;
-  List<DropdownMenuItem<LocationResultData>>? _provinceListItem = [];
-  LocationResultData? _provinceSelected;
-  List<DropdownMenuItem<LocationResultData>>? _cityListItem = [];
-  LocationResultData? _citySelected;
-  void LocationBlocListener(BuildContext context, LocationState state) {
+
+  ProvinceResponse? _provinceFromResponse;
+  List<DropdownMenuItem<LocationResultData>>? _provinceFromListItem = [];
+  LocationResultData? _provinceFromSelected;
+  List<DropdownMenuItem<LocationResultData>>? _cityFromListItem = [];
+  LocationResultData? _cityFromSelected;
+
+  ProvinceResponse? _provinceToResponse;
+  List<DropdownMenuItem<LocationResultData>>? _provinceToListItem = [];
+  LocationResultData? _provinceToSelected;
+  List<DropdownMenuItem<LocationResultData>>? _cityToListItem = [];
+  LocationResultData? _cityToSelected;
+
+  void locationFromBlocListener(BuildContext context, LocationState state) {
     state.maybeMap(
         orElse: () {},
         cityDataOptions: (e) => e.dataCity.fold(
@@ -38,7 +46,7 @@ class _LocationPageState extends State<LocationPage> {
                     )..show(context);
                   },
                   (r) {
-                    _cityListItem = r.results
+                    _cityFromListItem = r.results
                         .map((e) => DropdownMenuItem(
                               value: e,
                               child: Text("${e.type} ${e.cityName}"),
@@ -60,8 +68,57 @@ class _LocationPageState extends State<LocationPage> {
                   )..show(context);
                 },
                 (r) {
-                  _provinceResponse = r;
-                  _provinceListItem = r.results
+                  _provinceFromListItem = r.results
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e.province!),
+                          ))
+                      .toList();
+                },
+              ),
+            ));
+  }
+
+  void locationToBlocListener(BuildContext context, LocationState state) {
+    state.maybeMap(
+        orElse: () {},
+        cityDataOptions: (e) => e.dataCity.fold(
+            () => print("Is Loading"),
+            (a) => a.fold(
+                  (l) {
+                    l.map(
+                      notFound: (e) => _errorMessage = e.msg,
+                      badRequest: (e) => _errorMessage = e.badRequest,
+                      serverError: (e) => _errorMessage = "Server Error",
+                    );
+                    FlushbarHelper.createError(
+                      message: _errorMessage,
+                    )..show(context);
+                  },
+                  (r) {
+                    _cityToListItem = r.results
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text("${e.type} ${e.cityName}"),
+                            ))
+                        .toList();
+                  },
+                )),
+        provinceDataOptions: (e) => e.dataProvince.fold(
+              () => {},
+              (a) => a.fold(
+                (l) {
+                  l.map(
+                    notFound: (e) => _errorMessage = e.msg,
+                    badRequest: (e) => _errorMessage = e.badRequest,
+                    serverError: (e) => _errorMessage = "Server Error",
+                  );
+                  FlushbarHelper.createError(
+                    message: _errorMessage,
+                  )..show(context);
+                },
+                (r) {
+                  _provinceToListItem = r.results
                       .map((e) => DropdownMenuItem(
                             value: e,
                             child: Text(e.province!),
@@ -77,86 +134,125 @@ class _LocationPageState extends State<LocationPage> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: BlocProvider(
-            create: (context) =>
-                getIt<LocationBloc>()..add(LocationEvent.getLocationProvince()),
-            child: BlocConsumer<LocationBloc, LocationState>(
-              listener: LocationBlocListener,
-              builder: (context, state) {
-                return Center(
-                  child: Container(
-                    margin: EdgeInsets.all(20),
-                    decoration: BoxDecoration(shape: BoxShape.rectangle),
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        DropdownButton<LocationResultData>(
-                          isExpanded: true,
-                          hint: Text("Pilih Provinsi"),
-                          items: _provinceListItem == null
-                              ? []
-                              : _provinceListItem,
-                          onChanged: (newVal) =>
-                              onProvinceChanged(context, newVal),
-                          value: _provinceSelected == null
-                              ? null
-                              : _provinceSelected,
-                        ),
-                        DropdownButton<LocationResultData>(
-                          isExpanded: true,
-                          hint: Text("Pilih City"),
-                          items: _cityListItem == null ? [] : _cityListItem,
-                          onChanged: onCityChanged,
-                          value: _citySelected == null ? null : _citySelected,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-
-                // Container(
-                //   child: Column(
-                //     children: [
-                //       state.maybeMap(
-                //           orElse: () =>
-                //               Container(child: Text("Something Wrong")),
-                //           provinceDataOptions: (e) {
-                //             if (e.onLoading) {
-                //               return Center(child: CircularProgressIndicator());
-                //             } else {
-                //               return e.dataProvince.fold(
-                //                 () => noneDataGetProvinceWidget(),
-                //                 (a) => a.fold(
-                //                     (l) =>
-                //                         errorGetProvinceWidget(_errorMessage),
-                //                     // errorGetProvinceWidget(),
-                //                     (r) => successGetProvinceWidget(
-                //                         _provinceResponse!)),
-                //               );
-                //             }
-                //           })
-                //     ],
-                //   ),
-                // );
-              },
+            child: Center(
+          child: Container(
+            margin: EdgeInsets.all(20),
+            decoration: BoxDecoration(shape: BoxShape.rectangle),
+            width: double.infinity,
+            child: Column(
+              children: [
+                blocProviderLocation(
+                    context: context,
+                    listener: locationFromBlocListener,
+                    sectionLabel: "Dari",
+                    isDataFrom: true),
+                blocProviderLocation(
+                    context: context,
+                    listener: locationToBlocListener,
+                    sectionLabel: "Ke",
+                    isDataFrom: false),
+                SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  height: 40,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        print("DARI : " +
+                            _cityFromSelected.toString() +
+                            _provinceFromSelected.toString());
+                        print("KE : " +
+                            _cityToSelected.toString() +
+                            _provinceToSelected.toString());
+                      },
+                      child: Text("GET ALL DATA")),
+                )
+              ],
             ),
           ),
-        ),
+        )),
       ),
     );
   }
 
-  void onCityChanged(LocationResultData? newVal) {
+  BlocProvider<LocationBloc> blocProviderLocation({
+    required BuildContext context,
+    required void Function(BuildContext, LocationState) listener,
+    required String sectionLabel,
+    required isDataFrom,
+  }) {
+    return BlocProvider(
+      create: (context) =>
+          getIt<LocationBloc>()..add(LocationEvent.getLocationProvince()),
+      child: BlocConsumer<LocationBloc, LocationState>(
+        listener: listener,
+        builder: (context, state) {
+          return Column(
+            children: [
+              Text(sectionLabel),
+              DropdownButton<LocationResultData>(
+                isExpanded: true,
+                hint: Text("Pilih Provinsi"),
+                items: (isDataFrom)
+                    ? (_provinceFromListItem ?? [])
+                    : (_provinceToListItem ?? []),
+                onChanged: (newVal) => onProvinceChanged(
+                  context: context,
+                  newVal: newVal,
+                  isDataFrom: isDataFrom,
+                ),
+                value: (isDataFrom)
+                    ? (_provinceFromSelected ?? null)
+                    : (_provinceToSelected ?? null),
+              ),
+              DropdownButton<LocationResultData>(
+                isExpanded: true,
+                hint: Text("Pilih City"),
+                items: (isDataFrom)
+                    ? (_cityFromListItem ?? [])
+                    : (_cityToListItem ?? []),
+                onChanged: (newVal) => onCityChanged(
+                  newVal: newVal,
+                  isDataFrom: isDataFrom,
+                ),
+                value: (isDataFrom)
+                    ? (_cityFromSelected ?? null)
+                    : (_cityToSelected ?? null),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void onCityChanged({
+    LocationResultData? newVal,
+    required bool isDataFrom,
+  }) {
     setState(() {
-      _citySelected = newVal;
+      if (isDataFrom) {
+        _cityFromSelected = newVal;
+      } else {
+        _cityToSelected = newVal;
+      }
     });
   }
 
-  void onProvinceChanged(BuildContext context, LocationResultData? newVal) {
+  void onProvinceChanged({
+    required BuildContext context,
+    LocationResultData? newVal,
+    required bool isDataFrom,
+  }) {
     setState(() {
-      _provinceSelected = newVal;
-      _citySelected = null;
-      _cityListItem = [];
+      if (isDataFrom) {
+        _provinceFromSelected = newVal;
+        _cityFromSelected = null;
+        _cityFromListItem = [];
+      } else {
+        _provinceToSelected = newVal;
+        _cityToSelected = null;
+        _cityToListItem = [];
+      }
     });
     context.read<LocationBloc>()
       ..add(LocationEvent.getLocationCity(provinceId: newVal!.provinceId!));
