@@ -20,6 +20,8 @@ LocationReq _$LocationReqFromJson(Map<String, dynamic> json) {
       return ProvinceResponse.fromJson(json);
     case 'cityResponse':
       return CityResponse.fromJson(json);
+    case 'costResponse':
+      return CostResponse.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'LocationReq',
@@ -49,6 +51,15 @@ class _$LocationReqTearOff {
     );
   }
 
+  CostResponse costResponse(
+      dynamic query, LocationStatusData status, List<CostsResults> results) {
+    return CostResponse(
+      query,
+      status,
+      results,
+    );
+  }
+
   LocationReq fromJson(Map<String, Object?> json) {
     return LocationReq.fromJson(json);
   }
@@ -60,7 +71,6 @@ const $LocationReq = _$LocationReqTearOff();
 /// @nodoc
 mixin _$LocationReq {
   LocationStatusData get status => throw _privateConstructorUsedError;
-  List<LocationResultData> get results => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -70,6 +80,9 @@ mixin _$LocationReq {
     required TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)
         cityResponse,
+    required TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)
+        costResponse,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -80,6 +93,9 @@ mixin _$LocationReq {
     TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)?
         cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -90,6 +106,9 @@ mixin _$LocationReq {
     TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)?
         cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -97,18 +116,21 @@ mixin _$LocationReq {
   TResult map<TResult extends Object?>({
     required TResult Function(ProvinceResponse value) provinceResponse,
     required TResult Function(CityResponse value) cityResponse,
+    required TResult Function(CostResponse value) costResponse,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(ProvinceResponse value)? provinceResponse,
     TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProvinceResponse value)? provinceResponse,
     TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -123,7 +145,7 @@ abstract class $LocationReqCopyWith<$Res> {
   factory $LocationReqCopyWith(
           LocationReq value, $Res Function(LocationReq) then) =
       _$LocationReqCopyWithImpl<$Res>;
-  $Res call({LocationStatusData status, List<LocationResultData> results});
+  $Res call({LocationStatusData status});
 }
 
 /// @nodoc
@@ -137,17 +159,12 @@ class _$LocationReqCopyWithImpl<$Res> implements $LocationReqCopyWith<$Res> {
   @override
   $Res call({
     Object? status = freezed,
-    Object? results = freezed,
   }) {
     return _then(_value.copyWith(
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LocationStatusData,
-      results: results == freezed
-          ? _value.results
-          : results // ignore: cast_nullable_to_non_nullable
-              as List<LocationResultData>,
     ));
   }
 }
@@ -254,6 +271,9 @@ class _$ProvinceResponse implements ProvinceResponse {
     required TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)
         cityResponse,
+    required TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)
+        costResponse,
   }) {
     return provinceResponse(query, status, results);
   }
@@ -267,6 +287,9 @@ class _$ProvinceResponse implements ProvinceResponse {
     TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)?
         cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
   }) {
     return provinceResponse?.call(query, status, results);
   }
@@ -280,6 +303,9 @@ class _$ProvinceResponse implements ProvinceResponse {
     TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)?
         cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
     required TResult orElse(),
   }) {
     if (provinceResponse != null) {
@@ -293,6 +319,7 @@ class _$ProvinceResponse implements ProvinceResponse {
   TResult map<TResult extends Object?>({
     required TResult Function(ProvinceResponse value) provinceResponse,
     required TResult Function(CityResponse value) cityResponse,
+    required TResult Function(CostResponse value) costResponse,
   }) {
     return provinceResponse(this);
   }
@@ -302,6 +329,7 @@ class _$ProvinceResponse implements ProvinceResponse {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(ProvinceResponse value)? provinceResponse,
     TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
   }) {
     return provinceResponse?.call(this);
   }
@@ -311,6 +339,7 @@ class _$ProvinceResponse implements ProvinceResponse {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProvinceResponse value)? provinceResponse,
     TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
     required TResult orElse(),
   }) {
     if (provinceResponse != null) {
@@ -335,7 +364,6 @@ abstract class ProvinceResponse implements LocationReq {
   List<dynamic> get query;
   @override
   LocationStatusData get status;
-  @override
   List<LocationResultData> get results;
   @override
   @JsonKey(ignore: true)
@@ -444,6 +472,9 @@ class _$CityResponse implements CityResponse {
     required TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)
         cityResponse,
+    required TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)
+        costResponse,
   }) {
     return cityResponse(query, status, results);
   }
@@ -457,6 +488,9 @@ class _$CityResponse implements CityResponse {
     TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)?
         cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
   }) {
     return cityResponse?.call(query, status, results);
   }
@@ -470,6 +504,9 @@ class _$CityResponse implements CityResponse {
     TResult Function(dynamic query, LocationStatusData status,
             List<LocationResultData> results)?
         cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
     required TResult orElse(),
   }) {
     if (cityResponse != null) {
@@ -483,6 +520,7 @@ class _$CityResponse implements CityResponse {
   TResult map<TResult extends Object?>({
     required TResult Function(ProvinceResponse value) provinceResponse,
     required TResult Function(CityResponse value) cityResponse,
+    required TResult Function(CostResponse value) costResponse,
   }) {
     return cityResponse(this);
   }
@@ -492,6 +530,7 @@ class _$CityResponse implements CityResponse {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(ProvinceResponse value)? provinceResponse,
     TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
   }) {
     return cityResponse?.call(this);
   }
@@ -501,6 +540,7 @@ class _$CityResponse implements CityResponse {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProvinceResponse value)? provinceResponse,
     TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
     required TResult orElse(),
   }) {
     if (cityResponse != null) {
@@ -525,10 +565,208 @@ abstract class CityResponse implements LocationReq {
   dynamic get query;
   @override
   LocationStatusData get status;
-  @override
   List<LocationResultData> get results;
   @override
   @JsonKey(ignore: true)
   $CityResponseCopyWith<CityResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CostResponseCopyWith<$Res>
+    implements $LocationReqCopyWith<$Res> {
+  factory $CostResponseCopyWith(
+          CostResponse value, $Res Function(CostResponse) then) =
+      _$CostResponseCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {dynamic query, LocationStatusData status, List<CostsResults> results});
+}
+
+/// @nodoc
+class _$CostResponseCopyWithImpl<$Res> extends _$LocationReqCopyWithImpl<$Res>
+    implements $CostResponseCopyWith<$Res> {
+  _$CostResponseCopyWithImpl(
+      CostResponse _value, $Res Function(CostResponse) _then)
+      : super(_value, (v) => _then(v as CostResponse));
+
+  @override
+  CostResponse get _value => super._value as CostResponse;
+
+  @override
+  $Res call({
+    Object? query = freezed,
+    Object? status = freezed,
+    Object? results = freezed,
+  }) {
+    return _then(CostResponse(
+      query == freezed
+          ? _value.query
+          : query // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      status == freezed
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as LocationStatusData,
+      results == freezed
+          ? _value.results
+          : results // ignore: cast_nullable_to_non_nullable
+              as List<CostsResults>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CostResponse implements CostResponse {
+  _$CostResponse(this.query, this.status, this.results, {String? $type})
+      : $type = $type ?? 'costResponse';
+
+  factory _$CostResponse.fromJson(Map<String, dynamic> json) =>
+      _$$CostResponseFromJson(json);
+
+  @override
+  final dynamic query;
+  @override
+  final LocationStatusData status;
+  @override
+  final List<CostsResults> results;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'LocationReq.costResponse(query: $query, status: $status, results: $results)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CostResponse &&
+            const DeepCollectionEquality().equals(other.query, query) &&
+            const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality().equals(other.results, results));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(query),
+      const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(results));
+
+  @JsonKey(ignore: true)
+  @override
+  $CostResponseCopyWith<CostResponse> get copyWith =>
+      _$CostResponseCopyWithImpl<CostResponse>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<dynamic> query, LocationStatusData status,
+            List<LocationResultData> results)
+        provinceResponse,
+    required TResult Function(dynamic query, LocationStatusData status,
+            List<LocationResultData> results)
+        cityResponse,
+    required TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)
+        costResponse,
+  }) {
+    return costResponse(query, status, results);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(List<dynamic> query, LocationStatusData status,
+            List<LocationResultData> results)?
+        provinceResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<LocationResultData> results)?
+        cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
+  }) {
+    return costResponse?.call(query, status, results);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<dynamic> query, LocationStatusData status,
+            List<LocationResultData> results)?
+        provinceResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<LocationResultData> results)?
+        cityResponse,
+    TResult Function(dynamic query, LocationStatusData status,
+            List<CostsResults> results)?
+        costResponse,
+    required TResult orElse(),
+  }) {
+    if (costResponse != null) {
+      return costResponse(query, status, results);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProvinceResponse value) provinceResponse,
+    required TResult Function(CityResponse value) cityResponse,
+    required TResult Function(CostResponse value) costResponse,
+  }) {
+    return costResponse(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ProvinceResponse value)? provinceResponse,
+    TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
+  }) {
+    return costResponse?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProvinceResponse value)? provinceResponse,
+    TResult Function(CityResponse value)? cityResponse,
+    TResult Function(CostResponse value)? costResponse,
+    required TResult orElse(),
+  }) {
+    if (costResponse != null) {
+      return costResponse(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CostResponseToJson(this);
+  }
+}
+
+abstract class CostResponse implements LocationReq {
+  factory CostResponse(dynamic query, LocationStatusData status,
+      List<CostsResults> results) = _$CostResponse;
+
+  factory CostResponse.fromJson(Map<String, dynamic> json) =
+      _$CostResponse.fromJson;
+
+  dynamic get query;
+  @override
+  LocationStatusData get status;
+  List<CostsResults> get results;
+  @override
+  @JsonKey(ignore: true)
+  $CostResponseCopyWith<CostResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -19,6 +19,24 @@ abstract class LocationData with _$LocationData {
     String description,
   ) = LocationStatusData;
 
+  factory LocationData.cost(
+    int value,
+    String etd,
+    String note,
+  ) = Cost;
+
+  factory LocationData.costs(
+    String service,
+    String description,
+    List<Cost> cost,
+  ) = Costs;
+
+  factory LocationData.costsResults(
+    String code,
+    String name,
+    List<Costs> costs,
+  ) = CostsResults;
+
   factory LocationData.fromJson(Map<String, dynamic> json) =>
       _$LocationDataFromJson(json);
 }

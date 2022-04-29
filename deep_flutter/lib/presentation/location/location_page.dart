@@ -152,19 +152,39 @@ class _LocationPageState extends State<LocationPage> {
                     sectionLabel: "Ke",
                     isDataFrom: false),
                 SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  height: 40,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        print("DARI : " +
-                            _cityFromSelected.toString() +
-                            _provinceFromSelected.toString());
-                        print("KE : " +
-                            _cityToSelected.toString() +
-                            _provinceToSelected.toString());
-                      },
-                      child: Text("GET ALL DATA")),
+                BlocProvider(
+                  create: (context) => getIt<LocationBloc>(),
+                  child: BlocConsumer<LocationBloc, LocationState>(
+                    listener: (context, state) {
+                      state.maybeMap(
+                          orElse: () {},
+                          costDataOptions: (value) => value.costData.fold(
+                              () => {},
+                              (a) => a.fold(
+                                    (l) => print("Error"),
+                                    (r) => print(r.toString()),
+                                  )));
+                    },
+                    builder: (context, state) {
+                      return Container(
+                        width: double.infinity,
+                        height: 40,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              context.read<LocationBloc>()
+                                ..add(
+                                  LocationEvent.getCost(
+                                    fromData: _cityFromSelected!,
+                                    toData: _cityToSelected!,
+                                    courier: "jne",
+                                    weight: 1,
+                                  ),
+                                );
+                            },
+                            child: Text("GET ALL DATA")),
+                      );
+                    },
+                  ),
                 )
               ],
             ),
@@ -201,8 +221,8 @@ class _LocationPageState extends State<LocationPage> {
                   isDataFrom: isDataFrom,
                 ),
                 value: (isDataFrom)
-                    ? (_provinceFromSelected ?? null)
-                    : (_provinceToSelected ?? null),
+                    ? (_provinceFromSelected)
+                    : (_provinceToSelected),
               ),
               DropdownButton<LocationResultData>(
                 isExpanded: true,
@@ -214,9 +234,7 @@ class _LocationPageState extends State<LocationPage> {
                   newVal: newVal,
                   isDataFrom: isDataFrom,
                 ),
-                value: (isDataFrom)
-                    ? (_cityFromSelected ?? null)
-                    : (_cityToSelected ?? null),
+                value: (isDataFrom) ? (_cityFromSelected) : (_cityToSelected),
               ),
             ],
           );

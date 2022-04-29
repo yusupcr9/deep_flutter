@@ -20,6 +20,12 @@ LocationData _$LocationDataFromJson(Map<String, dynamic> json) {
       return LocationResultData.fromJson(json);
     case 'locationStatusData':
       return LocationStatusData.fromJson(json);
+    case 'cost':
+      return Cost.fromJson(json);
+    case 'costs':
+      return Costs.fromJson(json);
+    case 'costsResults':
+      return CostsResults.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'LocationData',
@@ -55,6 +61,30 @@ class _$LocationDataTearOff {
     );
   }
 
+  Cost cost(int value, String etd, String note) {
+    return Cost(
+      value,
+      etd,
+      note,
+    );
+  }
+
+  Costs costs(String service, String description, List<Cost> cost) {
+    return Costs(
+      service,
+      description,
+      cost,
+    );
+  }
+
+  CostsResults costsResults(String code, String name, List<Costs> costs) {
+    return CostsResults(
+      code,
+      name,
+      costs,
+    );
+  }
+
   LocationData fromJson(Map<String, Object?> json) {
     return LocationData.fromJson(json);
   }
@@ -76,6 +106,12 @@ mixin _$LocationData {
             @JsonKey(name: "postal_code") String? postalCode)
         locationResultData,
     required TResult Function(int code, String description) locationStatusData,
+    required TResult Function(int value, String etd, String note) cost,
+    required TResult Function(
+            String service, String description, List<Cost> cost)
+        costs,
+    required TResult Function(String code, String name, List<Costs> costs)
+        costsResults,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -89,6 +125,10 @@ mixin _$LocationData {
             @JsonKey(name: "postal_code") String? postalCode)?
         locationResultData,
     TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -102,6 +142,10 @@ mixin _$LocationData {
             @JsonKey(name: "postal_code") String? postalCode)?
         locationResultData,
     TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -109,18 +153,27 @@ mixin _$LocationData {
   TResult map<TResult extends Object?>({
     required TResult Function(LocationResultData value) locationResultData,
     required TResult Function(LocationStatusData value) locationStatusData,
+    required TResult Function(Cost value) cost,
+    required TResult Function(Costs value) costs,
+    required TResult Function(CostsResults value) costsResults,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(LocationResultData value)? locationResultData,
     TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LocationResultData value)? locationResultData,
     TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -289,6 +342,12 @@ class _$LocationResultData implements LocationResultData {
             @JsonKey(name: "postal_code") String? postalCode)
         locationResultData,
     required TResult Function(int code, String description) locationStatusData,
+    required TResult Function(int value, String etd, String note) cost,
+    required TResult Function(
+            String service, String description, List<Cost> cost)
+        costs,
+    required TResult Function(String code, String name, List<Costs> costs)
+        costsResults,
   }) {
     return locationResultData(
         provinceId, province, type, cityId, cityName, postalCode);
@@ -306,6 +365,10 @@ class _$LocationResultData implements LocationResultData {
             @JsonKey(name: "postal_code") String? postalCode)?
         locationResultData,
     TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
   }) {
     return locationResultData?.call(
         provinceId, province, type, cityId, cityName, postalCode);
@@ -323,6 +386,10 @@ class _$LocationResultData implements LocationResultData {
             @JsonKey(name: "postal_code") String? postalCode)?
         locationResultData,
     TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
     required TResult orElse(),
   }) {
     if (locationResultData != null) {
@@ -337,6 +404,9 @@ class _$LocationResultData implements LocationResultData {
   TResult map<TResult extends Object?>({
     required TResult Function(LocationResultData value) locationResultData,
     required TResult Function(LocationStatusData value) locationStatusData,
+    required TResult Function(Cost value) cost,
+    required TResult Function(Costs value) costs,
+    required TResult Function(CostsResults value) costsResults,
   }) {
     return locationResultData(this);
   }
@@ -346,6 +416,9 @@ class _$LocationResultData implements LocationResultData {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(LocationResultData value)? locationResultData,
     TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
   }) {
     return locationResultData?.call(this);
   }
@@ -355,6 +428,9 @@ class _$LocationResultData implements LocationResultData {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LocationResultData value)? locationResultData,
     TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
     required TResult orElse(),
   }) {
     if (locationResultData != null) {
@@ -488,6 +564,12 @@ class _$LocationStatusData implements LocationStatusData {
             @JsonKey(name: "postal_code") String? postalCode)
         locationResultData,
     required TResult Function(int code, String description) locationStatusData,
+    required TResult Function(int value, String etd, String note) cost,
+    required TResult Function(
+            String service, String description, List<Cost> cost)
+        costs,
+    required TResult Function(String code, String name, List<Costs> costs)
+        costsResults,
   }) {
     return locationStatusData(code, description);
   }
@@ -504,6 +586,10 @@ class _$LocationStatusData implements LocationStatusData {
             @JsonKey(name: "postal_code") String? postalCode)?
         locationResultData,
     TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
   }) {
     return locationStatusData?.call(code, description);
   }
@@ -520,6 +606,10 @@ class _$LocationStatusData implements LocationStatusData {
             @JsonKey(name: "postal_code") String? postalCode)?
         locationResultData,
     TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
     required TResult orElse(),
   }) {
     if (locationStatusData != null) {
@@ -533,6 +623,9 @@ class _$LocationStatusData implements LocationStatusData {
   TResult map<TResult extends Object?>({
     required TResult Function(LocationResultData value) locationResultData,
     required TResult Function(LocationStatusData value) locationStatusData,
+    required TResult Function(Cost value) cost,
+    required TResult Function(Costs value) costs,
+    required TResult Function(CostsResults value) costsResults,
   }) {
     return locationStatusData(this);
   }
@@ -542,6 +635,9 @@ class _$LocationStatusData implements LocationStatusData {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(LocationResultData value)? locationResultData,
     TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
   }) {
     return locationStatusData?.call(this);
   }
@@ -551,6 +647,9 @@ class _$LocationStatusData implements LocationStatusData {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(LocationResultData value)? locationResultData,
     TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
     required TResult orElse(),
   }) {
     if (locationStatusData != null) {
@@ -576,5 +675,636 @@ abstract class LocationStatusData implements LocationData {
   String get description;
   @JsonKey(ignore: true)
   $LocationStatusDataCopyWith<LocationStatusData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CostCopyWith<$Res> {
+  factory $CostCopyWith(Cost value, $Res Function(Cost) then) =
+      _$CostCopyWithImpl<$Res>;
+  $Res call({int value, String etd, String note});
+}
+
+/// @nodoc
+class _$CostCopyWithImpl<$Res> extends _$LocationDataCopyWithImpl<$Res>
+    implements $CostCopyWith<$Res> {
+  _$CostCopyWithImpl(Cost _value, $Res Function(Cost) _then)
+      : super(_value, (v) => _then(v as Cost));
+
+  @override
+  Cost get _value => super._value as Cost;
+
+  @override
+  $Res call({
+    Object? value = freezed,
+    Object? etd = freezed,
+    Object? note = freezed,
+  }) {
+    return _then(Cost(
+      value == freezed
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as int,
+      etd == freezed
+          ? _value.etd
+          : etd // ignore: cast_nullable_to_non_nullable
+              as String,
+      note == freezed
+          ? _value.note
+          : note // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$Cost implements Cost {
+  _$Cost(this.value, this.etd, this.note, {String? $type})
+      : $type = $type ?? 'cost';
+
+  factory _$Cost.fromJson(Map<String, dynamic> json) => _$$CostFromJson(json);
+
+  @override
+  final int value;
+  @override
+  final String etd;
+  @override
+  final String note;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'LocationData.cost(value: $value, etd: $etd, note: $note)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Cost &&
+            const DeepCollectionEquality().equals(other.value, value) &&
+            const DeepCollectionEquality().equals(other.etd, etd) &&
+            const DeepCollectionEquality().equals(other.note, note));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(value),
+      const DeepCollectionEquality().hash(etd),
+      const DeepCollectionEquality().hash(note));
+
+  @JsonKey(ignore: true)
+  @override
+  $CostCopyWith<Cost> get copyWith =>
+      _$CostCopyWithImpl<Cost>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)
+        locationResultData,
+    required TResult Function(int code, String description) locationStatusData,
+    required TResult Function(int value, String etd, String note) cost,
+    required TResult Function(
+            String service, String description, List<Cost> cost)
+        costs,
+    required TResult Function(String code, String name, List<Costs> costs)
+        costsResults,
+  }) {
+    return cost(value, etd, note);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)?
+        locationResultData,
+    TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
+  }) {
+    return cost?.call(value, etd, note);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)?
+        locationResultData,
+    TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
+    required TResult orElse(),
+  }) {
+    if (cost != null) {
+      return cost(value, etd, note);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LocationResultData value) locationResultData,
+    required TResult Function(LocationStatusData value) locationStatusData,
+    required TResult Function(Cost value) cost,
+    required TResult Function(Costs value) costs,
+    required TResult Function(CostsResults value) costsResults,
+  }) {
+    return cost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LocationResultData value)? locationResultData,
+    TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
+  }) {
+    return cost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LocationResultData value)? locationResultData,
+    TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
+    required TResult orElse(),
+  }) {
+    if (cost != null) {
+      return cost(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CostToJson(this);
+  }
+}
+
+abstract class Cost implements LocationData {
+  factory Cost(int value, String etd, String note) = _$Cost;
+
+  factory Cost.fromJson(Map<String, dynamic> json) = _$Cost.fromJson;
+
+  int get value;
+  String get etd;
+  String get note;
+  @JsonKey(ignore: true)
+  $CostCopyWith<Cost> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CostsCopyWith<$Res> {
+  factory $CostsCopyWith(Costs value, $Res Function(Costs) then) =
+      _$CostsCopyWithImpl<$Res>;
+  $Res call({String service, String description, List<Cost> cost});
+}
+
+/// @nodoc
+class _$CostsCopyWithImpl<$Res> extends _$LocationDataCopyWithImpl<$Res>
+    implements $CostsCopyWith<$Res> {
+  _$CostsCopyWithImpl(Costs _value, $Res Function(Costs) _then)
+      : super(_value, (v) => _then(v as Costs));
+
+  @override
+  Costs get _value => super._value as Costs;
+
+  @override
+  $Res call({
+    Object? service = freezed,
+    Object? description = freezed,
+    Object? cost = freezed,
+  }) {
+    return _then(Costs(
+      service == freezed
+          ? _value.service
+          : service // ignore: cast_nullable_to_non_nullable
+              as String,
+      description == freezed
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      cost == freezed
+          ? _value.cost
+          : cost // ignore: cast_nullable_to_non_nullable
+              as List<Cost>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$Costs implements Costs {
+  _$Costs(this.service, this.description, this.cost, {String? $type})
+      : $type = $type ?? 'costs';
+
+  factory _$Costs.fromJson(Map<String, dynamic> json) => _$$CostsFromJson(json);
+
+  @override
+  final String service;
+  @override
+  final String description;
+  @override
+  final List<Cost> cost;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'LocationData.costs(service: $service, description: $description, cost: $cost)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Costs &&
+            const DeepCollectionEquality().equals(other.service, service) &&
+            const DeepCollectionEquality()
+                .equals(other.description, description) &&
+            const DeepCollectionEquality().equals(other.cost, cost));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(service),
+      const DeepCollectionEquality().hash(description),
+      const DeepCollectionEquality().hash(cost));
+
+  @JsonKey(ignore: true)
+  @override
+  $CostsCopyWith<Costs> get copyWith =>
+      _$CostsCopyWithImpl<Costs>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)
+        locationResultData,
+    required TResult Function(int code, String description) locationStatusData,
+    required TResult Function(int value, String etd, String note) cost,
+    required TResult Function(
+            String service, String description, List<Cost> cost)
+        costs,
+    required TResult Function(String code, String name, List<Costs> costs)
+        costsResults,
+  }) {
+    return costs(service, description, this.cost);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)?
+        locationResultData,
+    TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
+  }) {
+    return costs?.call(service, description, this.cost);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)?
+        locationResultData,
+    TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
+    required TResult orElse(),
+  }) {
+    if (costs != null) {
+      return costs(service, description, this.cost);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LocationResultData value) locationResultData,
+    required TResult Function(LocationStatusData value) locationStatusData,
+    required TResult Function(Cost value) cost,
+    required TResult Function(Costs value) costs,
+    required TResult Function(CostsResults value) costsResults,
+  }) {
+    return costs(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LocationResultData value)? locationResultData,
+    TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
+  }) {
+    return costs?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LocationResultData value)? locationResultData,
+    TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
+    required TResult orElse(),
+  }) {
+    if (costs != null) {
+      return costs(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CostsToJson(this);
+  }
+}
+
+abstract class Costs implements LocationData {
+  factory Costs(String service, String description, List<Cost> cost) = _$Costs;
+
+  factory Costs.fromJson(Map<String, dynamic> json) = _$Costs.fromJson;
+
+  String get service;
+  String get description;
+  List<Cost> get cost;
+  @JsonKey(ignore: true)
+  $CostsCopyWith<Costs> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CostsResultsCopyWith<$Res> {
+  factory $CostsResultsCopyWith(
+          CostsResults value, $Res Function(CostsResults) then) =
+      _$CostsResultsCopyWithImpl<$Res>;
+  $Res call({String code, String name, List<Costs> costs});
+}
+
+/// @nodoc
+class _$CostsResultsCopyWithImpl<$Res> extends _$LocationDataCopyWithImpl<$Res>
+    implements $CostsResultsCopyWith<$Res> {
+  _$CostsResultsCopyWithImpl(
+      CostsResults _value, $Res Function(CostsResults) _then)
+      : super(_value, (v) => _then(v as CostsResults));
+
+  @override
+  CostsResults get _value => super._value as CostsResults;
+
+  @override
+  $Res call({
+    Object? code = freezed,
+    Object? name = freezed,
+    Object? costs = freezed,
+  }) {
+    return _then(CostsResults(
+      code == freezed
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String,
+      name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      costs == freezed
+          ? _value.costs
+          : costs // ignore: cast_nullable_to_non_nullable
+              as List<Costs>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CostsResults implements CostsResults {
+  _$CostsResults(this.code, this.name, this.costs, {String? $type})
+      : $type = $type ?? 'costsResults';
+
+  factory _$CostsResults.fromJson(Map<String, dynamic> json) =>
+      _$$CostsResultsFromJson(json);
+
+  @override
+  final String code;
+  @override
+  final String name;
+  @override
+  final List<Costs> costs;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'LocationData.costsResults(code: $code, name: $name, costs: $costs)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CostsResults &&
+            const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.costs, costs));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(costs));
+
+  @JsonKey(ignore: true)
+  @override
+  $CostsResultsCopyWith<CostsResults> get copyWith =>
+      _$CostsResultsCopyWithImpl<CostsResults>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)
+        locationResultData,
+    required TResult Function(int code, String description) locationStatusData,
+    required TResult Function(int value, String etd, String note) cost,
+    required TResult Function(
+            String service, String description, List<Cost> cost)
+        costs,
+    required TResult Function(String code, String name, List<Costs> costs)
+        costsResults,
+  }) {
+    return costsResults(code, name, this.costs);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)?
+        locationResultData,
+    TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
+  }) {
+    return costsResults?.call(code, name, this.costs);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            @JsonKey(name: "province_id") String? provinceId,
+            String? province,
+            String? type,
+            @JsonKey(name: "city_id") String? cityId,
+            @JsonKey(name: "city_name") String? cityName,
+            @JsonKey(name: "postal_code") String? postalCode)?
+        locationResultData,
+    TResult Function(int code, String description)? locationStatusData,
+    TResult Function(int value, String etd, String note)? cost,
+    TResult Function(String service, String description, List<Cost> cost)?
+        costs,
+    TResult Function(String code, String name, List<Costs> costs)? costsResults,
+    required TResult orElse(),
+  }) {
+    if (costsResults != null) {
+      return costsResults(code, name, this.costs);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LocationResultData value) locationResultData,
+    required TResult Function(LocationStatusData value) locationStatusData,
+    required TResult Function(Cost value) cost,
+    required TResult Function(Costs value) costs,
+    required TResult Function(CostsResults value) costsResults,
+  }) {
+    return costsResults(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LocationResultData value)? locationResultData,
+    TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
+  }) {
+    return costsResults?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LocationResultData value)? locationResultData,
+    TResult Function(LocationStatusData value)? locationStatusData,
+    TResult Function(Cost value)? cost,
+    TResult Function(Costs value)? costs,
+    TResult Function(CostsResults value)? costsResults,
+    required TResult orElse(),
+  }) {
+    if (costsResults != null) {
+      return costsResults(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CostsResultsToJson(this);
+  }
+}
+
+abstract class CostsResults implements LocationData {
+  factory CostsResults(String code, String name, List<Costs> costs) =
+      _$CostsResults;
+
+  factory CostsResults.fromJson(Map<String, dynamic> json) =
+      _$CostsResults.fromJson;
+
+  String get code;
+  String get name;
+  List<Costs> get costs;
+  @JsonKey(ignore: true)
+  $CostsResultsCopyWith<CostsResults> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -67,4 +67,41 @@ class LocationRepository extends LocationInterface {
     }
     ;
   }
+
+  @override
+  Future<Either<LocationFailure, CostResponse>> getCost({
+    required LocationResultData fromData,
+    required LocationResultData toData,
+    required int weight,
+    required String courier,
+  }) async {
+    Response response;
+    try {
+      response = await dio.post("https://api.rajaongkir.com/starter/cost",
+          data: {
+            "origin": fromData.cityId.toString(),
+            "destination": toData.cityId.toString(),
+            "weight": weight,
+            "courier": courier
+          },
+          options:
+              Options(headers: {"key": "e864a7f131d77a4f6b0bf9301bbc41ae"}));
+      final _result = response.data['rajaongkir'];
+      final data = CostResponse.fromJson(_result);
+      print(data.status.code);
+      return right(data);
+    } on DioError catch (e) {
+      print(e.response!.statusCode);
+      switch (e.response!.statusCode) {
+        case 400:
+          final errorData = e.response!.data['rajaongir']['status'];
+          final data = LocationStatusData.fromJson(errorData);
+          return left(LocationFailure.badRequest(data.description));
+        case 404:
+          return left(LocationFailure.notFound('Not Found'));
+        default:
+          return left(LocationFailure.serverError());
+      }
+    }
+  }
 }

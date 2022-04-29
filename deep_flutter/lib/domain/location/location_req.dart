@@ -6,12 +6,20 @@ part 'location_req.g.dart';
 @freezed
 abstract class LocationReq with _$LocationReq {
   factory LocationReq.provinceResponse(
-      List<dynamic> query,
-      LocationStatusData status,
-      List<LocationResultData> results) = ProvinceResponse;
-  factory LocationReq.cityResponse(dynamic query, LocationStatusData status,
-      List<LocationResultData> results) = CityResponse;
-
+    List<dynamic> query,
+    LocationStatusData status,
+    List<LocationResultData> results,
+  ) = ProvinceResponse;
+  factory LocationReq.cityResponse(
+    dynamic query,
+    LocationStatusData status,
+    List<LocationResultData> results,
+  ) = CityResponse;
+  factory LocationReq.costResponse(
+    dynamic query,
+    LocationStatusData status,
+    List<CostsResults> results,
+  ) = CostResponse;
   factory LocationReq.fromJson(Map<String, dynamic> json) =>
       _$LocationReqFromJson(json);
 }
