@@ -1,6 +1,8 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:deep_flutter/common/validation/input_validation.dart';
 import 'package:deep_flutter/domain/location/location_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../application/location/location_bloc.dart';
@@ -28,6 +30,30 @@ class _LocationPageState extends State<LocationPage> {
   LocationResultData? _provinceToSelected;
   List<DropdownMenuItem<LocationResultData>>? _cityToListItem = [];
   LocationResultData? _cityToSelected;
+
+  TextEditingController _weightController = TextEditingController();
+  FocusNode _weightFocusNode = FocusNode();
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
+  final _formKey = GlobalKey<FormState>();
+  String? _selectedCourier;
+
+  void _validateInputs(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      context.read<LocationBloc>()
+        ..add(
+          LocationEvent.getCost(
+            fromData: _cityFromSelected!,
+            toData: _cityToSelected!,
+            courier: _selectedCourier!,
+            weight: int.parse(_weightController.text),
+          ),
+        );
+    } else {
+      setState(() {
+        _autoValidateMode = AutovalidateMode.always;
+      });
+    }
+  }
 
   void locationFromBlocListener(BuildContext context, LocationState state) {
     state.maybeMap(
@@ -152,6 +178,46 @@ class _LocationPageState extends State<LocationPage> {
                     sectionLabel: "Ke",
                     isDataFrom: false),
                 SizedBox(height: 20),
+                Form(
+                  key: _formKey,
+                  autovalidateMode: _autoValidateMode,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _weightController,
+                    focusNode: _weightFocusNode,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Weight Gram",
+                      suffixText: "gram",
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(width: 3),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    hint: Text("Pilih Jenis Pengiriman"),
+                    items: [
+                      DropdownMenuItem(child: Text("JNE"), value: "jne"),
+                      DropdownMenuItem(child: Text("POS"), value: "pos"),
+                      DropdownMenuItem(child: Text("TIKI"), value: "tiki"),
+                    ],
+                    onChanged: (newVal) => setState(() {
+                      _selectedCourier = newVal;
+                    }),
+                    value: _selectedCourier,
+                  ),
+                ),
+                SizedBox(height: 20),
                 BlocProvider(
                   create: (context) => getIt<LocationBloc>(),
                   child: BlocConsumer<LocationBloc, LocationState>(
@@ -162,7 +228,17 @@ class _LocationPageState extends State<LocationPage> {
                               () => {},
                               (a) => a.fold(
                                     (l) => print("Error"),
-                                    (r) => print(r.toString()),
+                                    (r) => showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return SimpleDialog(
+                                            title: Text("Hasil Pencarian"),
+                                            children: r.results[0].costs
+                                                .map(
+                                                    (e) => listItemOfService(e))
+                                                .toList(),
+                                          );
+                                        }),
                                   )));
                     },
                     builder: (context, state) {
@@ -171,15 +247,7 @@ class _LocationPageState extends State<LocationPage> {
                         height: 40,
                         child: ElevatedButton(
                             onPressed: () {
-                              context.read<LocationBloc>()
-                                ..add(
-                                  LocationEvent.getCost(
-                                    fromData: _cityFromSelected!,
-                                    toData: _cityToSelected!,
-                                    courier: "jne",
-                                    weight: 1,
-                                  ),
-                                );
+                              _validateInputs(context);
                             },
                             child: Text("GET ALL DATA")),
                       );
@@ -193,6 +261,12 @@ class _LocationPageState extends State<LocationPage> {
       ),
     );
   }
+
+  Widget listItemOfService(Costs e) => ListTile(
+        title: Text(e.service),
+        trailing: Text("Rp." + e.cost[0].value.toString()),
+        subtitle: Text(e.cost[0].etd.toString() + " Hari"),
+      );
 
   BlocProvider<LocationBloc> blocProviderLocation({
     required BuildContext context,
